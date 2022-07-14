@@ -28,7 +28,7 @@ class Contenedor {
             // Si la tabla no existe, la crea
             if ((err.code == 'ER_NO_SUCH_TABLE') || (err.code == 'SQLITE_ERROR' && err.errno == '1' )) {
                 const createTable = require(`../db/${this.table}/create_table`);
-                console.log('Tabla creada');
+                await createTable();
                 await this.database(this.table).insert(object);
                 const id = await this.database(this.table).select('id').max('id');
     
@@ -47,7 +47,6 @@ class Contenedor {
         } catch (err) {
             if ((err.code == 'ER_NO_SUCH_TABLE') || (err.code == 'SQLITE_ERROR' && err.errno == '1' )) {
                 const createTable = require(`../db/${this.table}/create_table`);
-                console.log('Tabla creada');
                 return null;
             } else {
                 console.log('Error en método getById: ', err);
@@ -61,7 +60,6 @@ class Contenedor {
             const objects = await this.database.from(this.table).select('*');
             return objects;
         } catch (err) {
-            console.log(err);
             // Si la tabla no existe, la crea
             if ((err.code == 'ER_NO_SUCH_TABLE') || (err.code == 'SQLITE_ERROR' && err.errno == '1' )) {
                 const createTable = require(`../db/${this.table}/create_table`);

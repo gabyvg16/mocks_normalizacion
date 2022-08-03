@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const puerto = 8080;
 const routes = require('./routes/index');
+const productosTest = require('./routes/productosTest');
 const path = require('path');
 const { engine } = require('express-handlebars');
 const { Contenedor, Producto } = require('./objects/contenedor');
@@ -23,7 +24,12 @@ app.engine('hbs', engine({
 
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'hbs');
-app.use('/', routes);
+
+app.use('/api', routes);
+
+app.use('/*', (req, res) => {
+    res.status(404).send({ error: -2, descripcion: `Ruta ${req.url} y método ${req.method} no implementada`});
+});
 
 
 const expressServer = app.listen(puerto, (error) => {
